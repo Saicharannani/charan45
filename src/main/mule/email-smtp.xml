@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="14feb987-2d67-48a3-a2c4-6e58ebc80b5c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="69ee7bb2-1346-4d63-90fa-f4c1164b7cc6" >
+		<email:smtps-connection host="mail.godataskate.com" user="it@godataskate.com" password="FeE45(x1,?T$" >
+			<tls:context >
+				<tls:trust-store insecure="true" />
+			</tls:context>
+		</email:smtps-connection>
+	</email:smtp-config>
+ 
+	<flow name="email-smtpFlow" doc:id="bab7c242-3e52-4e96-ad8d-a84bd3935a89" >
+		<http:listener doc:name="Listener" doc:id="8941541e-18ec-402d-9a08-c2eeef475737" config-ref="HTTP_Listener_config" path="/mail"/>
+		<email:send doc:name="Send" doc:id="4fa9cd7f-84fe-4900-8f4d-f3d6c46d1297" config-ref="Email_SMTP" fromAddress="it@godataskate.com" subject="Test">
+			<email:to-addresses >
+				<email:to-address value="sasanks@dataskate.io" />
+			</email:to-addresses>
+			<email:body >
+				<email:content ><![CDATA[#[{"message":"Test"}]]]></email:content>
+			</email:body>
+		</email:send>
+	</flow>
+</mule>
